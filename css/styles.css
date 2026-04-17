@@ -247,6 +247,25 @@ button {
     cursor: none;
 }
 
+/* Ensure custom cursor shows on all interactive elements */
+.btn,
+.filter-btn,
+.project-card,
+.project-row,
+.experience-timeline__item,
+.education-card,
+.cert-card,
+.nav__link,
+.nav__toggle,
+.theme-toggle,
+.modal-close,
+.form-input,
+.hero__cta-btn,
+.social-link,
+[role="button"] {
+    cursor: none !important;
+}
+
 /* ------------------------------------------------
    Animated Background Grid
    ------------------------------------------------ */
@@ -454,15 +473,28 @@ button {
     display: none;
     flex-direction: column;
     gap: 6px;
-    padding: var(--space-sm);
+    padding: var(--space-md);
     z-index: var(--z-modal);
-    background: transparent;
-    border: none;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    min-width: 48px;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.nav__toggle:hover,
+.nav__toggle:focus {
+    background: var(--accent-subtle);
+    border-color: var(--accent);
 }
 
 .nav__toggle-bar {
-    width: 28px;
-    height: 2px;
+    width: 24px;
+    height: 3px;
     background: var(--text-primary);
     border-radius: var(--radius-full);
     transition: all var(--transition-base);
@@ -470,7 +502,7 @@ button {
 }
 
 .nav__toggle.active .nav__toggle-bar:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
+    transform: rotate(45deg) translate(5px, 7px);
 }
 
 .nav__toggle.active .nav__toggle-bar:nth-child(2) {
@@ -479,7 +511,7 @@ button {
 }
 
 .nav__toggle.active .nav__toggle-bar:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
+    transform: rotate(-45deg) translate(5px, -7px);
 }
 
 /* Theme Toggle */

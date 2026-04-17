@@ -521,9 +521,9 @@ function initScrollReveal() {
    ------------------------------------------------ */
 function initProjectFilter() {
     const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectRows = document.querySelectorAll('.project-row');
+    const allProjectRows = document.querySelectorAll('.project-row');
 
-    if (!filterButtons.length || !projectRows.length) return;
+    if (!filterButtons.length || !allProjectRows.length) return;
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -532,19 +532,20 @@ function initProjectFilter() {
             // Add active class to clicked button
             button.classList.add('active');
 
-            const filterValue = button.getAttribute('data-filter');
+            const filterValue = button.getAttribute('data-filter').trim().toLowerCase();
 
-            projectRows.forEach(row => {
-                const category = row.querySelector('.project-row__category').textContent;
+            allProjectRows.forEach(row => {
+                const categoryEl = row.querySelector('.project-row__category');
+                const category = categoryEl ? categoryEl.textContent.trim().toLowerCase() : '';
 
                 if (filterValue === 'all' || category === filterValue) {
                     // Show with animation
+                    row.style.display = 'block';
                     gsap.to(row, {
                         opacity: 1,
                         scale: 1,
                         duration: 0.3,
-                        ease: 'power2.out',
-                        onStart: () => row.style.display = 'block'
+                        ease: 'power2.out'
                     });
                 } else {
                     // Hide with animation
@@ -612,14 +613,15 @@ function initContactForm() {
             hasErrors = true;
         }
 
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!data.email.trim()) {
+        // Email validation - more robust regex
+        const emailValue = data.email.trim();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailValue) {
             emailError.textContent = 'Email is required';
             emailError.classList.add('show');
             hasErrors = true;
-        } else if (!emailRegex.test(data.email)) {
-            emailError.textContent = 'Please enter a valid email address';
+        } else if (!emailRegex.test(emailValue)) {
+            emailError.textContent = 'Please enter a valid email address (e.g., name@example.com)';
             emailError.classList.add('show');
             hasErrors = true;
         }
