@@ -3002,6 +3002,382 @@ textarea {
 }
 
 /* ------------------------------------------------
+   Assignment 3: Project Controls (Filter + Sort)
+   ------------------------------------------------ */
+.projects__controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+}
+
+.projects__sort {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.sort-label {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+}
+
+.sort-select {
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    color: var(--text-primary);
+    font-size: var(--fs-sm);
+    font-family: inherit;
+    min-width: 140px;
+    transition: all var(--transition-fast);
+}
+
+.sort-select:hover,
+.sort-select:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+
+.sort-select option {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* ------------------------------------------------
+   Assignment 3: GitHub Repos Section (API)
+   ------------------------------------------------ */
+.github-repos {
+    padding: var(--space-5xl) 0;
+    background: var(--bg-secondary);
+}
+
+.section-header__subtitle {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    margin-top: var(--space-sm);
+}
+
+.github-repos__container {
+    min-height: 300px;
+}
+
+.github-repos__loading,
+.github-repos__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-3xl);
+    color: var(--text-secondary);
+}
+
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.github-repos__error svg {
+    color: var(--accent);
+}
+
+.github-repos__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-xl);
+}
+
+.repo-card {
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.repo-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.1);
+}
+
+.repo-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-md);
+}
+
+.repo-card__name {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.repo-card__name svg {
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.repo-card__visibility {
+    font-size: var(--fs-xs);
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+}
+
+.repo-card__description {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.repo-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+}
+
+.repo-card__meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.repo-card__meta-item svg {
+    width: 14px;
+    height: 14px;
+}
+
+.repo-card__language-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.repo-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--fs-sm);
+    color: var(--accent);
+    font-weight: var(--fw-medium);
+    margin-top: var(--space-sm);
+    transition: gap var(--transition-fast);
+}
+
+.repo-card__link:hover {
+    gap: var(--space-sm);
+}
+
+/* ------------------------------------------------
+   Assignment 3: User Session & Login
+   ------------------------------------------------ */
+.user-session {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-right: var(--space-md);
+}
+
+.login-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    transition: all var(--transition-fast);
+}
+
+.login-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+}
+
+.user-avatar {
+    width: 28px;
+    height: 28px;
+    background: var(--gradient-1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: white;
+}
+
+.user-name {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.logout-btn {
+    padding: var(--space-xs);
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logout-btn:hover {
+    color: var(--accent);
+}
+
+/* Session Timer */
+.session-timer {
+    position: fixed;
+    bottom: var(--space-lg);
+    left: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    z-index: 100;
+    box-shadow: var(--shadow-md);
+}
+
+.session-timer svg {
+    color: var(--accent);
+}
+
+.session-timer strong {
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Login Modal */
+.login-modal {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+}
+
+.login-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.login-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.login-modal__content {
+    position: relative;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-2xl);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform var(--transition-base);
+}
+
+.login-modal.active .login-modal__content {
+    transform: translateY(0);
+}
+
+.login-modal__close {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.login-modal__close:hover {
+    color: var(--accent);
+}
+
+.login-modal__title {
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-bold);
+    margin-bottom: var(--space-sm);
+}
+
+.login-modal__subtitle {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xl);
+}
+
+.login-modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.login-modal__form .form-input {
+    text-align: center;
+}
+
+/* ------------------------------------------------
    Responsive Design
    ------------------------------------------------ */
 @media (max-width: 1280px) {
@@ -3043,6 +3419,30 @@ textarea {
 
     .nav__toggle {
         display: flex;
+    }
+
+    /* Hide user session on mobile nav */
+    .user-session {
+        display: none;
+    }
+
+    /* Projects controls stack on mobile */
+    .projects__controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .projects__filter {
+        justify-content: center;
+    }
+
+    .projects__sort {
+        justify-content: center;
+    }
+
+    /* GitHub repos grid */
+    .github-repos__grid {
+        grid-template-columns: 1fr;
     }
 
     .hero__content {
@@ -3356,6 +3756,22 @@ textarea {
     .mobile-social-bar__link svg {
         width: 18px;
         height: 18px;
+    }
+
+    /* Session timer moves to top on mobile */
+    .session-timer {
+        bottom: auto;
+        top: var(--space-lg);
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 10px;
+        padding: var(--space-xs) var(--space-sm);
+    }
+
+    /* Smaller filter buttons on mobile */
+    .filter-btn {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--fs-xs);
     }
 }
 

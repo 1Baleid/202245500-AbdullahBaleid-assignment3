@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollProgress();
     initScrollReveal();
     initProjectFilter();
+    initProjectSort();          // Assignment 3: Sorting
     initContactForm();
     initCounterAnimation();
     initParticles();
@@ -31,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initProjectModal();
     initCardImages();
     initThemeToggle();
+    initGitHubRepos();          // Assignment 3: API Integration
+    initSessionTimer();         // Assignment 3: State Management
+    initUserSession();          // Assignment 3: Login/Logout
 });
 
 /* ------------------------------------------------
@@ -2199,4 +2203,368 @@ function initImageAttachmentMode() {
     console.log('  clearSavedImages()  - Clear all saved images');
     console.log('');
     console.log('When done, set DEV_MODE_IMAGE_ATTACH to false in main.js');
+}
+
+/* ================================================
+   ASSIGNMENT 3: NEW FEATURES
+   ================================================ */
+
+/* ------------------------------------------------
+   Project Sorting (Complex Logic)
+   ------------------------------------------------ */
+function initProjectSort() {
+    const sortSelect = document.getElementById('sortSelect');
+    const projectsList = document.querySelector('.projects__list');
+
+    if (!sortSelect || !projectsList) return;
+
+    // Store original order
+    const originalOrder = Array.from(projectsList.querySelectorAll('.project-row'));
+
+    sortSelect.addEventListener('change', () => {
+        const sortValue = sortSelect.value;
+        const projects = Array.from(projectsList.querySelectorAll('.project-row'));
+
+        let sortedProjects;
+
+        switch (sortValue) {
+            case 'name-asc':
+                sortedProjects = projects.sort((a, b) => {
+                    const nameA = a.querySelector('.project-row__title').textContent.toLowerCase();
+                    const nameB = b.querySelector('.project-row__title').textContent.toLowerCase();
+                    return nameA.localeCompare(nameB);
+                });
+                break;
+            case 'name-desc':
+                sortedProjects = projects.sort((a, b) => {
+                    const nameA = a.querySelector('.project-row__title').textContent.toLowerCase();
+                    const nameB = b.querySelector('.project-row__title').textContent.toLowerCase();
+                    return nameB.localeCompare(nameA);
+                });
+                break;
+            case 'category':
+                sortedProjects = projects.sort((a, b) => {
+                    const catA = a.querySelector('.project-row__category').textContent.toLowerCase();
+                    const catB = b.querySelector('.project-row__category').textContent.toLowerCase();
+                    return catA.localeCompare(catB);
+                });
+                break;
+            default:
+                sortedProjects = originalOrder;
+        }
+
+        // Animate and reorder
+        gsap.to(projects, {
+            opacity: 0,
+            y: -10,
+            duration: 0.2,
+            stagger: 0.03,
+            onComplete: () => {
+                sortedProjects.forEach(project => {
+                    projectsList.appendChild(project);
+                });
+                gsap.to(sortedProjects, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.3,
+                    stagger: 0.05
+                });
+            }
+        });
+    });
+}
+
+/* ------------------------------------------------
+   GitHub API Integration
+   ------------------------------------------------ */
+function initGitHubRepos() {
+    const grid = document.getElementById('githubGrid');
+    const loading = document.getElementById('githubLoading');
+    const error = document.getElementById('githubError');
+    const retryBtn = document.getElementById('retryGithub');
+
+    if (!grid) return;
+
+    const GITHUB_USERNAME = '1Baleid';
+    const REPOS_TO_SHOW = 6;
+
+    async function fetchRepos() {
+        loading.style.display = 'flex';
+        error.style.display = 'none';
+        grid.innerHTML = '';
+
+        try {
+            const response = await fetch(
+                `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=${REPOS_TO_SHOW}`
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch repositories');
+            }
+
+            const repos = await response.json();
+
+            loading.style.display = 'none';
+
+            if (repos.length === 0) {
+                grid.innerHTML = '<p class="github-repos__empty">No public repositories found.</p>';
+                return;
+            }
+
+            repos.forEach(repo => {
+                const card = createRepoCard(repo);
+                grid.appendChild(card);
+            });
+
+            // Animate cards in
+            gsap.from(grid.children, {
+                opacity: 0,
+                y: 30,
+                duration: 0.5,
+                stagger: 0.1,
+                ease: 'power2.out'
+            });
+
+        } catch (err) {
+            console.error('GitHub API Error:', err);
+            loading.style.display = 'none';
+            error.style.display = 'flex';
+        }
+    }
+
+    function createRepoCard(repo) {
+        const card = document.createElement('article');
+        card.className = 'repo-card';
+
+        const languageColor = getLanguageColor(repo.language);
+
+        card.innerHTML = `
+            <div class="repo-card__header">
+                <h3 class="repo-card__name">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    ${repo.name}
+                </h3>
+                <span class="repo-card__visibility">${repo.private ? 'Private' : 'Public'}</span>
+            </div>
+            <p class="repo-card__description">${repo.description || 'No description available.'}</p>
+            <div class="repo-card__meta">
+                ${repo.language ? `
+                    <span class="repo-card__meta-item">
+                        <span class="repo-card__language-dot" style="background: ${languageColor}"></span>
+                        ${repo.language}
+                    </span>
+                ` : ''}
+                <span class="repo-card__meta-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    ${repo.stargazers_count}
+                </span>
+                <span class="repo-card__meta-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/>
+                        <path d="M2 12H22"/>
+                        <path d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z"/>
+                    </svg>
+                    ${repo.forks_count}
+                </span>
+            </div>
+            <a href="${repo.html_url}" target="_blank" rel="noopener" class="repo-card__link">
+                View Repository
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
+            </a>
+        `;
+
+        return card;
+    }
+
+    function getLanguageColor(language) {
+        const colors = {
+            'JavaScript': '#f1e05a',
+            'TypeScript': '#3178c6',
+            'Python': '#3572A5',
+            'HTML': '#e34c26',
+            'CSS': '#563d7c',
+            'Java': '#b07219',
+            'C++': '#f34b7d',
+            'C': '#555555',
+            'Go': '#00ADD8',
+            'Rust': '#dea584',
+            'Ruby': '#701516',
+            'PHP': '#4F5D95',
+            'Swift': '#ffac45',
+            'Kotlin': '#A97BFF',
+            'Jupyter Notebook': '#DA5B0B'
+        };
+        return colors[language] || '#8b949e';
+    }
+
+    // Initial fetch
+    fetchRepos();
+
+    // Retry button
+    if (retryBtn) {
+        retryBtn.addEventListener('click', fetchRepos);
+    }
+}
+
+/* ------------------------------------------------
+   Session Timer (State Management)
+   ------------------------------------------------ */
+function initSessionTimer() {
+    const sessionTimeEl = document.getElementById('sessionTime');
+    if (!sessionTimeEl) return;
+
+    // Get or set session start time
+    let sessionStart = sessionStorage.getItem('sessionStart');
+    if (!sessionStart) {
+        sessionStart = Date.now();
+        sessionStorage.setItem('sessionStart', sessionStart);
+    } else {
+        sessionStart = parseInt(sessionStart);
+    }
+
+    function updateTimer() {
+        const elapsed = Date.now() - sessionStart;
+        const minutes = Math.floor(elapsed / 60000);
+        const seconds = Math.floor((elapsed % 60000) / 1000);
+
+        sessionTimeEl.textContent =
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // Update immediately and every second
+    updateTimer();
+    setInterval(updateTimer, 1000);
+
+    // Track total visits
+    let visitCount = localStorage.getItem('visitCount');
+    visitCount = visitCount ? parseInt(visitCount) + 1 : 1;
+    localStorage.setItem('visitCount', visitCount);
+
+    console.log(`Welcome! This is visit #${visitCount}`);
+}
+
+/* ------------------------------------------------
+   User Session / Login Simulation (State Management)
+   ------------------------------------------------ */
+function initUserSession() {
+    const loginBtn = document.getElementById('loginBtn');
+    const userInfo = document.getElementById('userInfo');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const loginModal = document.getElementById('loginModal');
+    const loginModalClose = document.getElementById('loginModalClose');
+    const loginForm = document.getElementById('loginForm');
+    const guestNameInput = document.getElementById('guestName');
+
+    if (!loginBtn || !loginModal) return;
+
+    // Check if user is already logged in
+    const savedUser = localStorage.getItem('guestUser');
+    if (savedUser) {
+        showLoggedInState(savedUser);
+    }
+
+    // Open login modal
+    loginBtn.addEventListener('click', () => {
+        loginModal.classList.add('active');
+        setTimeout(() => guestNameInput.focus(), 100);
+    });
+
+    // Close login modal
+    loginModalClose.addEventListener('click', closeModal);
+    loginModal.querySelector('.login-modal__backdrop').addEventListener('click', closeModal);
+
+    function closeModal() {
+        loginModal.classList.remove('active');
+    }
+
+    // Handle login form submit
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = guestNameInput.value.trim();
+
+        if (name.length >= 2) {
+            localStorage.setItem('guestUser', name);
+            showLoggedInState(name);
+            closeModal();
+            guestNameInput.value = '';
+
+            // Show welcome message
+            showNotification(`Welcome, ${name}!`);
+        }
+    });
+
+    // Handle logout
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('guestUser');
+        showLoggedOutState();
+        showNotification('You have been logged out.');
+    });
+
+    function showLoggedInState(name) {
+        loginBtn.style.display = 'none';
+        userInfo.style.display = 'flex';
+        userAvatar.textContent = name.charAt(0).toUpperCase();
+        userName.textContent = name;
+    }
+
+    function showLoggedOutState() {
+        loginBtn.style.display = 'flex';
+        userInfo.style.display = 'none';
+    }
+
+    function showNotification(message) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span>${message}</span>
+        `;
+
+        // Add styles
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 24px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0 10px 40px rgba(255, 107, 107, 0.2);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+        `;
+
+        notification.querySelector('svg').style.color = 'var(--accent)';
+
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 10);
+
+        // Remove after delay
+        setTimeout(() => {
+            notification.style.transform = 'translateX(120%)';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
 }
