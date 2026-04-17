@@ -139,13 +139,20 @@ function initNavigation() {
     });
 
     // Animate nav on load
-    gsap.from('.nav', {
-        y: -100,
-        opacity: 0,
-        duration: 1,
-        delay: 0.5,
-        ease: 'power3.out'
-    });
+    gsap.fromTo('.nav',
+        {
+            y: -100,
+            opacity: 0
+        },
+        {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            delay: 0.5,
+            ease: 'power3.out',
+            clearProps: 'transform'
+        }
+    );
 }
 
 /* ------------------------------------------------
