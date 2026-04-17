@@ -147,6 +147,24 @@
     --shadow-glow-sm: 0 0 30px var(--accent-glow);
 }
 
+/* Light theme component overrides */
+.light-theme .nav--scrolled .nav__container {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .session-timer {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.light-theme .mobile-social-bar {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.light-theme .login-modal__content {
+    background: var(--bg-primary);
+}
+
 /* ------------------------------------------------
    CSS Reset & Base Styles
    ------------------------------------------------ */
