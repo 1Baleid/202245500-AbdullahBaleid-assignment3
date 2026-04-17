@@ -654,9 +654,9 @@ function initContactForm() {
     });
 
     // Enhanced focus animations for form inputs
-    const inputs = form.querySelectorAll('.form-input');
+    const formInputs = form.querySelectorAll('.form-input');
 
-    inputs.forEach(input => {
+    formInputs.forEach(input => {
         input.addEventListener('focus', () => {
             gsap.to(input, {
                 scale: 1.02,
