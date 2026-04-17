@@ -183,6 +183,11 @@ body {
     z-index: var(--z-cursor);
     width: 24px;
     height: 24px;
+    opacity: 1;
+    visibility: visible;
+    left: -100px;
+    top: -100px;
+    transition: opacity 0.15s ease;
 }
 
 /* Arrow pointer shape using SVG */

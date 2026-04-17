@@ -67,55 +67,56 @@ function initCustomCursor() {
     if (!cursor || !cursorFollower) return;
 
     // Check if device has touch (disable cursor on touch devices)
-    if ('ontouchstart' in window) {
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
         cursor.style.display = 'none';
         cursorFollower.style.display = 'none';
+        document.body.style.cursor = 'auto';
         return;
     }
+
+    // Ensure cursor is visible initially
+    cursor.style.opacity = '1';
+    cursor.style.visibility = 'visible';
 
     // Direct mouse tracking - no lag
     document.addEventListener('mousemove', (e) => {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
-        cursorFollower.style.left = e.clientX + 'px';
-        cursorFollower.style.top = e.clientY + 'px';
+        cursor.style.opacity = '1';
     });
 
-    // Cursor interactions
-    const interactiveElements = document.querySelectorAll('a, button, .project-card, .skill-tag, .filter-btn, .form-input, .nav__toggle');
+    // Cursor interactions - expanded list of interactive elements
+    const interactiveElements = document.querySelectorAll('a, button, input, textarea, select, .project-card, .project-row, .skill-tag, .filter-btn, .form-input, .nav__toggle, .theme-toggle, .education-card, .cert-card, .experience-timeline__item, [role="button"], [onclick]');
 
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => {
             cursor.classList.add('cursor--hover');
-            cursorFollower.classList.add('cursor-follower--hover');
         });
 
         el.addEventListener('mouseleave', () => {
             cursor.classList.remove('cursor--hover');
-            cursorFollower.classList.remove('cursor-follower--hover');
         });
     });
 
     // Click effect
     document.addEventListener('mousedown', () => {
         cursor.classList.add('cursor--click');
-        cursorFollower.classList.add('cursor-follower--click');
     });
 
     document.addEventListener('mouseup', () => {
         cursor.classList.remove('cursor--click');
-        cursorFollower.classList.remove('cursor-follower--click');
     });
 
     // Hide cursor when leaving window
-    document.addEventListener('mouseleave', () => {
-        cursor.style.opacity = '0';
-        cursorFollower.style.opacity = '0';
+    document.addEventListener('mouseleave', (e) => {
+        if (e.relatedTarget === null) {
+            cursor.style.opacity = '0';
+        }
     });
 
+    // Show cursor when entering window
     document.addEventListener('mouseenter', () => {
         cursor.style.opacity = '1';
-        cursorFollower.style.opacity = '1';
     });
 }
 
