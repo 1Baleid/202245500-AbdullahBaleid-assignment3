@@ -1,6 +1,6 @@
 # Technical Documentation
 
-## Portfolio Website - Assignment 2
+## Portfolio Website - Assignment 3
 
 ---
 
@@ -9,34 +9,36 @@
 2. [Technology Stack](#technology-stack)
 3. [File Structure](#file-structure)
 4. [Features Implementation](#features-implementation)
-5. [Responsive Design](#responsive-design)
-6. [Performance Considerations](#performance-considerations)
-7. [Browser Compatibility](#browser-compatibility)
-8. [Future Improvements](#future-improvements)
+5. [API Integration](#api-integration)
+6. [State Management](#state-management)
+7. [Responsive Design](#responsive-design)
+8. [Performance Considerations](#performance-considerations)
+9. [Browser Compatibility](#browser-compatibility)
 
 ---
 
 ## 1. Project Overview
 
-This portfolio website showcases Abdullah Baleid's professional profile, including education, work experience, projects, certifications, and contact information. The site features modern dark/light themes with coral accent colors, smooth animations, and full responsiveness across devices.
+This portfolio website showcases Abdullah Baleid's professional profile, including education, work experience, projects, certifications, and contact information. Assignment 3 adds API integration, complex logic, and advanced state management.
 
 ### Key Features
 - Responsive single-page design
 - Animated hero section with typing effect
 - Interactive experience and project modals
-- Contact form with enhanced validation and user feedback
-- Project filtering by category
-- Dark/Light theme toggle with localStorage persistence
-- GSAP-powered scroll animations and transitions
-- Custom cursor (desktop only)
-- Mobile navigation menu
+- Contact form with enhanced validation
+- Project filtering AND sorting (complex logic)
+- Dark/Light theme toggle with persistence
+- **NEW: GitHub API integration**
+- **NEW: Session tracking with timer**
+- **NEW: Login/logout simulation**
+- GSAP-powered scroll animations
+- CSS-only custom cursor
 
-### Assignment 2 Enhancements
-- **Dynamic Interactive Feature**: Project filtering system
-- **Data Handling**: Theme preference persistence using localStorage
-- **Error Handling**: Comprehensive form validation with specific error messages
-- **Animations**: Smooth theme transitions and filter animations
-- **User Feedback**: Loading states, success messages, and empty states
+### Assignment 3 Enhancements
+- **API Integration**: GitHub API to fetch and display repositories
+- **Complex Logic**: Combined filtering + sorting with animated transitions
+- **State Management**: Session timer, login simulation, visit counter
+- **Performance**: CSS-only cursor, optimized code
 
 ---
 
@@ -46,36 +48,38 @@ This portfolio website showcases Abdullah Baleid's professional profile, includi
 | Technology | Purpose |
 |------------|---------|
 | HTML5 | Semantic structure |
-| CSS3 | Styling with custom properties, Grid, Flexbox |
-| JavaScript (ES6+) | Interactivity and animations |
+| CSS3 | Styling with custom properties |
+| JavaScript (ES6+) | Interactivity, async/await |
 | GSAP 3.12 | Animation library |
-| ScrollTrigger | Scroll-based animations |
+| Fetch API | HTTP requests to GitHub |
 
-### External Resources
-| Resource | CDN Source |
-|----------|------------|
-| GSAP | cdnjs.cloudflare.com |
-| Google Fonts | fonts.googleapis.com |
-| Custom Arabic Font | Local (Palestine-Regular.ttf) |
+### External APIs
+| API | Endpoint | Purpose |
+|-----|----------|---------|
+| GitHub API | api.github.com/users/{user}/repos | Fetch public repositories |
+
+### Storage APIs
+| API | Scope | Purpose |
+|-----|-------|---------|
+| localStorage | Persistent | Theme, user name, visit count |
+| sessionStorage | Session | Session start time |
 
 ---
 
 ## 3. File Structure
 
 ```
-assignment-2/
-├── index.html              # Main HTML file
+202245500-AbdullahBaleid-assignment3/
+├── index.html              # Main HTML file (780+ lines)
 ├── css/
-│   └── styles.css          # All styles (3000+ lines)
+│   └── styles.css          # All styles (3800+ lines)
 ├── js/
-│   └── script.js           # All JavaScript (2100+ lines)
+│   └── script.js           # All JavaScript (2500+ lines)
 ├── assets/
-│   └── images/             # Project images (12 files)
+│   └── images/             # Project images
 ├── docs/
 │   ├── ai-usage-report.md  # AI documentation
 │   └── technical-documentation.md
-├── alfont_com_Palestine-Regular.ttf  # Arabic font
-├── Abdullah_Baleid's_CV.pdf
 ├── README.md
 └── .gitignore
 ```
@@ -84,76 +88,178 @@ assignment-2/
 
 ## 4. Features Implementation
 
-### 4.1 Navigation
-- **Desktop:** Fixed navigation bar with scroll-triggered background blur
-- **Mobile:** Hamburger menu with full-screen overlay
-- **Active link highlighting:** Based on scroll position
+### 4.1 Project Filtering + Sorting (Complex Logic)
 
+Combined filter and sort functionality with GSAP animations.
+
+**HTML:**
+```html
+<div class="projects__controls">
+    <div class="projects__filter">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="AI/ML">AI/ML</button>
+        <!-- ... -->
+    </div>
+    <div class="projects__sort">
+        <select id="sortSelect" class="sort-select">
+            <option value="default">Default</option>
+            <option value="name-asc">Name (A-Z)</option>
+            <!-- ... -->
+        </select>
+    </div>
+</div>
+```
+
+**JavaScript Logic:**
 ```javascript
-// Scroll detection for nav styling
-window.addEventListener('scroll', () => {
-    if (currentScroll > 50) {
-        nav.classList.add('nav--scrolled');
-    }
+// Filter: Show/hide based on category
+filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const filterValue = btn.getAttribute('data-filter');
+        // Filter logic with animations
+    });
+});
+
+// Sort: Reorder DOM elements
+sortSelect.addEventListener('change', () => {
+    const sortValue = sortSelect.value;
+    const sorted = projects.sort((a, b) => {
+        // Comparison logic
+    });
+    // Reorder with animations
 });
 ```
 
-### 4.2 Hero Section
-- **Typing Effect:** Cycles through job titles
-- **Animated Orbs:** CSS animations with GSAP enhancement
-- **Arabic Background Text:** Decorative text with scroll fade
+### 4.2 User Session Simulation
 
-### 4.3 Experience Timeline
-- **4-column grid layout** on desktop
-- **Modal popups** with detailed information
-- **Dynamic image loading** from JavaScript data objects
+**Login Flow:**
+1. User clicks "Login" button
+2. Modal appears with name input
+3. User enters name and submits
+4. Name stored in localStorage
+5. UI updates to show logged-in state
+6. Notification confirms login
 
-### 4.4 Projects Section
-- **3-column grid** with hover effects
-- **Modal details** with technology tags
-- **Click-to-expand** for full descriptions
-- **Category filtering** with smooth animations
-- **Empty state handling** when no projects match filter
+**Logout Flow:**
+1. User clicks logout icon
+2. localStorage cleared
+3. UI reverts to logged-out state
+4. Notification confirms logout
 
-### 4.5 Theme Toggle
-- **Dark/Light mode switching** with CSS custom properties
-- **localStorage persistence** for user preference
-- **Smooth transitions** using GSAP animations
-- **Icon switching** (sun/moon) based on current theme
+### 4.3 Session Timer
+
+Tracks time spent on the website using sessionStorage.
 
 ```javascript
-// Theme persistence
-const savedTheme = localStorage.getItem('theme') || 'dark';
-if (savedTheme === 'light') {
-    body.classList.add('light-theme');
+// On page load
+let sessionStart = sessionStorage.getItem('sessionStart');
+if (!sessionStart) {
+    sessionStart = Date.now();
+    sessionStorage.setItem('sessionStart', sessionStart);
 }
+
+// Update every second
+setInterval(() => {
+    const elapsed = Date.now() - sessionStart;
+    const minutes = Math.floor(elapsed / 60000);
+    const seconds = Math.floor((elapsed % 60000) / 1000);
+    sessionTimeEl.textContent = `${minutes}:${seconds}`;
+}, 1000);
 ```
-
-### 4.6 Contact Form
-- **Enhanced validation** with specific error messages
-- **Real-time error clearing** on input
-- **Visual feedback** with animations and error styling
-- **Success message** with auto-hide functionality
-
-```javascript
-// Enhanced validation with specific messages
-if (!data.name.trim()) {
-    nameError.textContent = 'Name is required';
-    nameError.classList.add('show');
-}
-```
-
-### 4.7 Animations
-All animations use GSAP with ScrollTrigger:
-- **Reveal animations:** Elements fade in on scroll
-- **Counter animations:** Numbers count up when visible
-- **Parallax effects:** Background elements move at different speeds
-- **Theme transitions:** Smooth background color changes
-- **Filter animations:** Scale and opacity transitions for project cards
 
 ---
 
-## 5. Responsive Design
+## 5. API Integration
+
+### GitHub API Implementation
+
+**Endpoint:** `https://api.github.com/users/1Baleid/repos?sort=updated&per_page=6`
+
+**Fetch Pattern:**
+```javascript
+async function fetchRepos() {
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error('Failed to fetch');
+        const repos = await response.json();
+        // Render repos
+    } catch (err) {
+        // Show error UI with retry button
+    }
+}
+```
+
+**Error Handling:**
+- Loading state with spinner
+- Error state with retry button
+- Empty state for no repositories
+- Network error handling
+
+**Data Displayed:**
+| Field | Source |
+|-------|--------|
+| Repository Name | repo.name |
+| Description | repo.description |
+| Language | repo.language |
+| Stars | repo.stargazers_count |
+| Forks | repo.forks_count |
+| URL | repo.html_url |
+
+### Language Color Mapping
+```javascript
+const colors = {
+    'JavaScript': '#f1e05a',
+    'Python': '#3572A5',
+    'TypeScript': '#3178c6',
+    // ...
+};
+```
+
+---
+
+## 6. State Management
+
+### Storage Strategy
+
+| Data | Storage | Persistence |
+|------|---------|-------------|
+| Theme preference | localStorage | Permanent |
+| User name | localStorage | Permanent |
+| Visit count | localStorage | Permanent |
+| Session start | sessionStorage | Tab only |
+
+### State Flow Diagram
+
+```
+┌─────────────────────────────────────────────────┐
+│                  Page Load                       │
+└─────────────────────┬───────────────────────────┘
+                      │
+        ┌─────────────┴─────────────┐
+        ▼                           ▼
+┌───────────────────┐     ┌───────────────────┐
+│ Check localStorage │     │ Check sessionStorage│
+│   - theme          │     │   - sessionStart    │
+│   - guestUser      │     │                     │
+│   - visitCount     │     │                     │
+└─────────┬─────────┘     └─────────┬───────────┘
+          │                         │
+          ▼                         ▼
+┌───────────────────┐     ┌───────────────────┐
+│ Apply saved state │     │ Start/resume timer │
+└───────────────────┘     └───────────────────┘
+```
+
+### Visit Counter Implementation
+```javascript
+let visitCount = localStorage.getItem('visitCount');
+visitCount = visitCount ? parseInt(visitCount) + 1 : 1;
+localStorage.setItem('visitCount', visitCount);
+```
+
+---
+
+## 7. Responsive Design
 
 ### Breakpoints
 | Breakpoint | Target Devices |
@@ -164,53 +270,46 @@ All animations use GSAP with ScrollTrigger:
 | 640px - 768px | Large mobile |
 | < 640px | Mobile |
 
-### Key Responsive Features
-1. **Navigation:** Switches to hamburger menu below 1024px
-2. **Hero:** Single column layout on tablet/mobile
-3. **Projects:** 3 → 2 → 1 columns
-4. **Experience Grid:** 4 → 2 → 1 columns
-5. **Contact:** Full-width form on mobile
-6. **Custom Cursor:** Disabled on touch devices
+### New Component Responsiveness
 
-### CSS Variables for Responsive Typography
-```css
-@media (max-width: 640px) {
-    :root {
-        --fs-6xl: 2.5rem;
-        --fs-5xl: 2rem;
-    }
-}
-```
+**User Session Controls:**
+- Hidden on mobile (< 1024px)
+- Full display on desktop
+
+**Project Controls:**
+- Stack vertically on mobile
+- Horizontal layout on desktop
+
+**GitHub Repos Grid:**
+- 1 column on mobile
+- 2 columns on tablet
+- 3 columns on desktop
+
+**Session Timer:**
+- Bottom-left on desktop
+- Top-center on mobile
 
 ---
 
-## 6. Performance Considerations
+## 8. Performance Considerations
 
 ### Optimizations Applied
-1. **Image Optimization:** WebP format where supported
-2. **Lazy Loading:** Images load when in viewport
-3. **Font Display:** `font-display: swap` for custom fonts
-4. **Reduced Animations:** Simplified on mobile for performance
-5. **CSS Contains:** Used for complex layouts
-6. **GSAP Efficiency:** Disabled tilt effects for performance
 
-### Accessibility
-- Semantic HTML5 elements
-- ARIA labels on interactive elements
-- Keyboard navigation support
-- Reduced motion support via `prefers-reduced-motion`
+1. **CSS-Only Cursor:** No JavaScript tracking overhead
+2. **Async API Calls:** Non-blocking data fetching
+3. **Efficient DOM Updates:** Batch updates for sorting
+4. **GSAP Optimization:** Efficient animation sequencing
+5. **Event Delegation:** Single listeners where possible
 
-```css
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-    }
-}
-```
+### Lighthouse Targets
+- Performance: > 90
+- Accessibility: > 90
+- Best Practices: > 90
+- SEO: > 90
 
 ---
 
-## 7. Browser Compatibility
+## 9. Browser Compatibility
 
 ### Tested Browsers
 | Browser | Version | Status |
@@ -220,26 +319,14 @@ All animations use GSAP with ScrollTrigger:
 | Safari | 17+ | Full Support |
 | Edge | 120+ | Full Support |
 
-### Polyfills/Fallbacks
-- CSS custom properties with fallback values
-- Backdrop-filter fallback for older browsers
-- Touch detection for cursor functionality
-
----
-
-## 8. Future Improvements
-
-### Planned Enhancements
-1. **Backend Integration:** Connect contact form to email service
-2. **Blog Section:** Add article/blog functionality
-3. **Internationalization:** Arabic language support
-4. **Analytics:** Add tracking for portfolio views
-5. **Advanced Accessibility:** Implement more granular ARIA controls
-
-### Performance Goals
-- Lighthouse score > 90 for all metrics
-- First Contentful Paint < 1.5s
-- Time to Interactive < 3s
+### Feature Support
+| Feature | Fallback |
+|---------|----------|
+| Fetch API | Polyfill available |
+| localStorage | Error handling |
+| sessionStorage | Error handling |
+| CSS Custom Cursor | Falls back to default |
+| Backdrop Filter | Solid background |
 
 ---
 
@@ -248,21 +335,29 @@ All animations use GSAP with ScrollTrigger:
 ### Local Development
 ```bash
 # Clone repository
-git clone [repository-url]
+git clone https://github.com/1Baleid/202245500-AbdullahBaleid-assignment3.git
 
 # Navigate to project
-cd assignment-1
+cd 202245500-AbdullahBaleid-assignment3
 
-# Open in browser (or use Live Server)
+# Open in browser
 open index.html
+# Or use Live Server in VS Code
 ```
 
-### Code Style
-- BEM naming convention for CSS classes
-- Modular JavaScript with separate init functions
-- Consistent 4-space indentation
-- Comments for complex logic sections
+### Testing API Integration
+1. Open browser DevTools (F12)
+2. Go to Network tab
+3. Refresh page
+4. Look for `api.github.com` request
+5. Verify 200 status and JSON response
+
+### Testing State Management
+1. Open browser DevTools
+2. Go to Application tab
+3. Check localStorage and sessionStorage
+4. Verify data persists across refreshes
 
 ---
 
-*Last Updated: February 2026*
+*Last Updated: April 2026*

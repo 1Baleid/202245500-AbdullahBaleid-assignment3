@@ -1,6 +1,6 @@
 # Abdullah Baleid - Portfolio Website
 
-A modern, responsive personal portfolio website built with HTML, CSS, and JavaScript.
+A modern, responsive personal portfolio website built with HTML, CSS, and JavaScript, featuring API integration, advanced state management, and complex interactive logic.
 
 ## Project Overview
 
@@ -11,30 +11,51 @@ This portfolio showcases my professional profile as a Software Engineering stude
 - Smooth GSAP animations and scroll effects
 - Interactive modals for projects and experience
 - Contact form with validation and user feedback
-- Custom cursor (desktop)
+- Custom CSS cursor (desktop)
 - Dark/Light theme toggle with localStorage persistence
-- Project filtering by category
-- Enhanced error handling and user feedback
+- Project filtering and sorting by category
+- GitHub API integration with live repository data
+- Session tracking and visitor analytics
+- Simulated login/logout with personalization
 
-## Assignment 2 Updates
+## Assignment 3 Updates
 
-### New Features Added
-- **Dynamic Interactive Feature**: Project filtering system allowing users to filter projects by category (All, AI/ML, Web Dev)
-- **Data Handling**: Dark/Light theme toggle with user preference saved in localStorage
-- **Enhanced Animations**: Smooth transitions for theme changes, hover effects, and filter animations
-- **Improved Error Handling**: Detailed form validation with specific error messages for each field
-- **User Feedback**: Success messages, loading states, and empty state messages
+### API Integration
+- **GitHub API**: Fetches and displays public repositories from GitHub
+- Live data including repository name, description, language, stars, and forks
+- Error handling with retry functionality
+- Loading states and user-friendly error messages
+
+### Complex Logic
+- **Combined Filtering + Sorting**: Filter projects by category AND sort by name or category
+- Multi-step form validation with specific error messages
+- Animated transitions when filtering/sorting projects
+- Conditional content display based on user state
+
+### State Management
+- **Session Timer**: Tracks time spent on the website (sessionStorage)
+- **Login/Logout Simulation**: Stores user name in localStorage
+- **Personalized Experience**: Greeting with visitor's name
+- **Visit Counter**: Tracks total number of visits
+- **Theme Persistence**: Dark/Light mode saved across sessions
+
+### Performance Optimization
+- CSS-only custom cursor (no JavaScript tracking overhead)
+- Efficient event delegation
+- Optimized animations with GSAP
+- Lazy loading considerations
 
 ## Live Demo
 
-[View Live Site](#) *(Add GitHub Pages or deployment link)*
+[View Live Site](https://1baleid.github.io/202245500-AbdullahBaleid-assignment3/)
 
 ## Technology Stack
 
 - **HTML5** - Semantic structure
-- **CSS3** - Custom properties, Grid, Flexbox, CSS Variables for theming
-- **JavaScript (ES6+)** - Interactivity, localStorage, DOM manipulation
+- **CSS3** - Custom properties, Grid, Flexbox, CSS Variables
+- **JavaScript (ES6+)** - Async/await, localStorage, sessionStorage, Fetch API
 - **GSAP 3.12** - Animations and transitions
+- **GitHub API** - External data integration
 
 ## Getting Started
 
@@ -46,12 +67,12 @@ This portfolio showcases my professional profile as a Software Engineering stude
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/1Baleid/s202245500-1Baleid-assignment1.git
+git clone https://github.com/1Baleid/202245500-AbdullahBaleid-assignment3.git
 ```
 
 2. Navigate to project folder:
 ```bash
-cd s202245500-1Baleid-assignment1
+cd 202245500-AbdullahBaleid-assignment3
 ```
 
 3. Open in browser:
@@ -70,12 +91,12 @@ python -m http.server 8000
 ## Project Structure
 
 ```
-assignment-2/
+202245500-AbdullahBaleid-assignment3/
 ├── index.html              # Main HTML file
 ├── css/
-│   └── styles.css          # Styles (3000+ lines)
+│   └── styles.css          # Styles (3500+ lines)
 ├── js/
-│   └── script.js           # JavaScript (2100+ lines)
+│   └── script.js           # JavaScript (2500+ lines)
 ├── assets/
 │   └── images/             # Project images
 ├── docs/
@@ -90,18 +111,38 @@ assignment-2/
 1. **Hero** - Introduction with animated typing effect
 2. **About** - Bio, stats, and profile image
 3. **Journey** - Education and work experience timeline
-4. **Projects** - Featured projects with modals
-5. **Certifications** - Technical and academic achievements
-6. **Contact** - Contact form and social links
+4. **Projects** - Featured projects with filtering and sorting
+5. **GitHub** - Live repository data from GitHub API
+6. **Certifications** - Technical and academic achievements
+7. **Contact** - Contact form and social links
+
+## New Features Guide
+
+### Using the GitHub Section
+- Scroll to the "GitHub Repositories" section
+- View live data from my GitHub profile
+- Click "View Repository" to open in new tab
+- If loading fails, click "Retry" to try again
+
+### Using Project Filter + Sort
+1. Click filter buttons (All, AI/ML, Web Dev, Research) to filter projects
+2. Use the "Sort by" dropdown to sort (A-Z, Z-A, Category)
+3. Combine both for precise control
+
+### Using Session Features
+- **Session Timer**: See time spent at bottom-left corner
+- **Login**: Click "Login" in navbar, enter your name
+- **Logout**: Click the logout icon next to your name
+- Your name persists across page refreshes
 
 ## AI Usage Summary
 
 This project utilized AI tools (Claude, GitHub Copilot) for:
-- CSS animation generation and theme implementation
-- JavaScript debugging and feature development
-- Responsive design optimization
-- Code structure suggestions and error handling
-- Documentation writing
+- API integration implementation and error handling
+- State management patterns and localStorage usage
+- CSS styling for new components
+- JavaScript feature development and debugging
+- Documentation writing and code comments
 
 All AI-generated code was reviewed, understood, and modified to fit project requirements. See `docs/ai-usage-report.md` for detailed documentation.
 
@@ -111,7 +152,7 @@ All AI-generated code was reviewed, understood, and modified to fit project requ
 1. Push your code to GitHub
 2. Go to repository Settings > Pages
 3. Select "Deploy from a branch"
-4. Choose "main" branch and "/ (root)" folder
+4. Choose "assignment3" branch and "/ (root)" folder
 5. Save and wait for deployment
 
 ### Other Options
@@ -146,7 +187,7 @@ All AI-generated code was reviewed, understood, and modified to fit project requ
 
 SWE363 - Web Engineering
 King Fahd University of Petroleum & Minerals (KFUPM)
-Assignment 2 - Interactive Features & AI Integration
+Assignment 3 - Advanced Functionality
 
 ## License
 
@@ -154,4 +195,4 @@ This project is created for educational purposes as part of coursework.
 
 ---
 
-*Built with HTML, CSS, JavaScript, and GSAP*
+*Built with HTML, CSS, JavaScript, GSAP, and GitHub API*
