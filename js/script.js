@@ -2324,13 +2324,20 @@ function initGitHubRepos() {
             });
 
             // Animate cards in
-            gsap.from(grid.children, {
-                opacity: 0,
-                y: 30,
-                duration: 0.5,
-                stagger: 0.1,
-                ease: 'power2.out'
-            });
+            gsap.fromTo(grid.children,
+                {
+                    opacity: 0,
+                    y: 30
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    stagger: 0.1,
+                    ease: 'power2.out',
+                    clearProps: 'all'
+                }
+            );
 
         } catch (err) {
             console.error('GitHub API Error:', err);
