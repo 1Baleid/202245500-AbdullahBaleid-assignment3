@@ -527,6 +527,16 @@ textarea {
     width: 20px;
     height: 20px;
     transition: all var(--transition-fast);
+    color: var(--text-primary);
+}
+
+/* Light mode: dark icon for contrast */
+.light-theme .theme-toggle {
+    color: #212529;
+}
+
+.light-theme .theme-toggle:hover {
+    color: #ffffff;
 }
 
 .theme-icon--sun {
